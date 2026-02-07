@@ -42,10 +42,13 @@ const Loader = {
         c.width = c.height = size || 128;
         const ctx = c.getContext('2d');
         const g = ctx.createRadialGradient(c.width/2, c.height/2, 0, c.width/2, c.height/2, c.width/2);
-        g.addColorStop(0, color);
-        g.addColorStop(0.15, color);
-        g.addColorStop(0.4, color.slice(0,-1) + ',0.3)');
-        g.addColorStop(0.7, color.slice(0,-1) + ',0.08)');
+        // Parse rgba(r,g,b,a) to extract r,g,b
+        const m = color.match(/(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/);
+        const r = m ? m[1] : 255, gr = m ? m[2] : 255, b = m ? m[3] : 255;
+        g.addColorStop(0, `rgba(${r},${gr},${b},1)`);
+        g.addColorStop(0.15, `rgba(${r},${gr},${b},1)`);
+        g.addColorStop(0.4, `rgba(${r},${gr},${b},0.3)`);
+        g.addColorStop(0.7, `rgba(${r},${gr},${b},0.08)`);
         g.addColorStop(1, 'rgba(0,0,0,0)');
         ctx.fillStyle = g;
         ctx.fillRect(0, 0, c.width, c.height);
